@@ -24,7 +24,7 @@ const RootLayout = () => {
   return (
     <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
      <QueryClientProvider client={queryClient}>
-    <div className='flex flex-col py-4 px-4 sm:px-16'>
+    <div className='flex flex-col py-4 px-4 sm:px-10'>
       <div  className='flex items-center justify-between'>
         <Link to={"/"} className='flex items-center gap-4 font-bold'>
             <img src='/logo.png' alt='img'  className='w-[42px] h-[42px]'/>

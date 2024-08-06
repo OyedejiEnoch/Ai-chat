@@ -10,9 +10,6 @@ const NewPrompt = ({chatId}) => {
 
   const [question, setQuestion]=useState()
   const [answer, setAnswer] =useState()
-  // const [role, setRole]=useState()
-  // const [parts, setParts]=useState()
-
   const [image, setImage]=useState({
     isLoading:false,
     error:"",
@@ -20,52 +17,18 @@ const NewPrompt = ({chatId}) => {
     aiData:{}
   })
 
-  console.log(chatId.history)
-
-  // const getHistory =()=>{
-  //   chatId?.history.map((history)=>(
-  //     setRole(history.role),
-  //     setParts( [{ text: history?.parts[0].text }])
-  //   ))
-  // }
-  // getHistory()  
-
-  // console.log(role, parts)
-
   const chat = model.startChat({
-    history: [
-      chatId?.history.map(({ role, parts }) => ({
-        role,
-        parts: [{ text: parts[0].text }],
-      })),
-    ],
+    history: chatId?.history?.map(({ role, parts }) => ({
+      role,
+      parts: [{ text: parts[0].text }],
+    })) || [], 
     generationConfig: {
       // maxOutputTokens: 100,
     },
   });
-
-  // const chat = model.startChat({
-  //   history: [
-  //     {
-  //       role: "user",
-  //       parts: [{ text: "Hello, I have 2 dogs in my house." }],
-  //     },
-  //     {
-  //       role: "model",
-  //       parts: [{ text: "Great to meet you. What would you like to know?" }],
-  //     },
-  //   ],
-  //   generationConfig: {
-  //     maxOutputTokens: 100,
-  //   },
-  // });
-
-  console.log(chatId?._id)
   const endRef =useRef(null)
   const formRef =useRef(null)
-
   const queryClient =useQueryClient()
-
   const mutation = useMutation({
     mutationFn: async()=>{
       return fetch(`${import.meta.env.VITE_API_URL}/api/chats/${chatId._id}`, {
@@ -82,10 +45,9 @@ const NewPrompt = ({chatId}) => {
 
       
     },
-    onSuccess: (id) => {
-      console.log("Triggered")
+    onSuccess: () => {
       // Invalidate and refetch
-      queryClient.invalidateQueries({ queryKey: ['chatData', chatId?._id] }).then((res)=>(
+      queryClient.invalidateQueries({ queryKey: ['chatData', chatId?._id] }).then(()=>(
         formRef.current.reset(),
         setAnswer(""),
         setQuestion(""),
@@ -103,7 +65,6 @@ const NewPrompt = ({chatId}) => {
     }
   })
 
-
     useEffect(()=>{
       endRef.current.scrollIntoView({behaviour:"smooth"})
     },[chatId,answer, question, image.data.filePath])
@@ -116,7 +77,6 @@ const NewPrompt = ({chatId}) => {
       let acumulatedText = '';
       for await (const chunk of result.stream) {
       const chunkText = chunk.text();
-      console.log(chunkText);
       acumulatedText += chunkText;
       setAnswer(acumulatedText);
     }
@@ -151,7 +111,7 @@ const NewPrompt = ({chatId}) => {
       }
     }
     hasRun.current = true
-})
+}, [])
   
   return (
     < >

@@ -26,11 +26,7 @@ const ChatPage = () => {
     <div className='h-[100%] flex flex-col items-center relative'>
       <div className='flex-1 overflow-auto w-full flex justify-center'>
         <div className='w-[80%] sm:w-[60%] flex flex-col gap-6 '>
-            
-            <div className='p-6'>Test Message from ai</div>
-
             {isPending? "Loading..." : error ? "Error" :  data.history.map((message)=>(
- 
           <>
               {message.img &&
               <IKImage
