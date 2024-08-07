@@ -164,10 +164,10 @@ const imagekit = new ImageKit({
   //   res.send("Success")
   // })
 
-  // app.use((err, req, res, next)=>{
-  //   console.log(err.stack)
-  //   res.status(401).send("unAuthencticated")
-  // })
+  app.use((err, req, res, next)=>{
+    console.log(err.stack)
+    res.status(401).send("unAuthencticated")
+  })
 
 app.listen(port, (req, res)=>{
     connection()
