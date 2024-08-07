@@ -10,14 +10,14 @@ import path from "path";
 import { urlToHttpOptions } from "url";
 
 dotenv.config()
+
 const app =express()
 app.use(express.json())
-
 app.use(cors({
     origin:process.env.FRONT_END_URL,
     credentials:true
 }))
-
+app.use(ClerkExpressRequireAuth());
 
 const connection =()=>{
   mongoose.connect(process.env.MONGO_DB_URL).then((con)=>{
@@ -166,6 +166,7 @@ const imagekit = new ImageKit({
 
   app.use((err, req, res, next)=>{
     console.log(err.stack)
+    console.log(err.message)
     res.status(401).send("unAuthencticated")
   })
 
